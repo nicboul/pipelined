@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Emplacement de la commande route (whereis route)
+ROUTE_CMD="/sbin/route"
+
+# Repertoire de base de PPPD
+# Doit obligatoirement terminer par un /
+PPPD_BASE="/"
+#PPPD_BASE="/usr/pkg/"
+#PPPD_BASE="/usr/local/"
+
+
+### FIN DE LA SECTION EDITABLE ###
+
+usepeerdns() {
+
+if [ -n "$USEPEERDNS" -a -f "$PPPD_BASE"etc/ppp/resolv.conf ]; then
+	if [ -f "$PPPD_BASE"etc/ppp/resolv.prev ]; then
+		cp -f "$PPPD_BASE"etc/ppp/resolv.prev /etc/resolv.conf
+	else
+		rm -f /etc/resolv.conf
+	fi
+fi
+
+}
+
+if [ "$6" = "gateway-linux" ]
+then
+usepeerdns
+OLDGATE=`cat "$PPPD_BASE"etc/ppp/gateway.prev | grep OLDGATE | awk '{ print $2 }'`
+TUNSERVER=`cat "$PPPD_BASE"etc/ppp/gateway.prev | grep TUNSERV | awk '{ print $2 }'`
+$ROUTE_CMD delete default gw $TUNSERVER
+$ROUTE_CMD delete $TUNSERVER gw $OLDGATE
+$ROUTE_CMD add default gw $OLDGATE
+fi
+
+if [ "$6" = "gateway-bsd" ]
+then
+usepeerdns
+OLDGATE=`cat "$PPPD_BASE"etc/ppp/gateway.prev | grep OLDGATE | awk '{ print $2 }'`
+TUNSERVER=`cat "$PPPD_BASE"etc/ppp/gateway.prev | grep TUNSERV | awk '{ print $2 }'`
+$ROUTE_CMD delete default $TUNSERVER
+$ROUTE_CMD delete $TUNSERVER $OLDGATE
+$ROUTE_CMD add default $OLDGATE
+fi
+

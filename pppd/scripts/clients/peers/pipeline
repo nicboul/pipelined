@@ -1,0 +1,38 @@
+### REMPLACEZ VOTRE_USERNAME ###
+name VOTRE_USERNAME
+
+
+### ADRESSE DU SERVEUR PIPELINE tun-gw.libertip.com ###
+pty "pptp tun-gw.libertip.com --nolaunchpppd"
+
+
+### MPPE ###
+# Pour utiliser le MPPE il suffit d'enlever le commentaire "#" devant +mppe
+
+#+mppe
++mschap-v2
+
+
+### ROUTING ###
+# Pour utiliser votre Pipeline comme default gateway ipparam et usepeerdns doivent etre activer
+# Les utilisateurs *BSD doivent utiliser "gateway-bsd" comme argument a ipparam
+# D'autres OS devraient progressivement apparaitres pendant la phase de ptototypage (osx solaris etc..)
+
+#ipparam gateway-linux
+#usepeerdns
+
+
+### FIN DE LA SECTION EDITABLE ###
+# Ne touchez a rien en dessous de cette ligne
+# A vos risques et perils
+
+-crtscts
+-pap
+-chap
+lock
+local
+noauth
+updetach
+ipcp-accept-remote
+ipcp-accept-local
+

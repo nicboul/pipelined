@@ -1,0 +1,11 @@
+Apres avoir fait make dans /usr/pkgsrc/net/pppd
+Aller dans /usr/pkgsrc/net/pppd/work/ppp-2.4.3/pppd/plugins
+Copier Makefile.linux vers Makefile
+Effacer tout ce qui a dans le repertoire sauf le fichier Makefile
+Copier le fichier mysql_auth.c dans work/ppp-2.4.3/pppd/plugins/
+Ajouter "-I/usr/pkg/include -L/usr/pkg/lib/mysql -lmysqlclient"  a la ligne CFLAGS ( <mysql/mysql.h> )
+Remplacer la ligne PLUGINS pour PLUGINS := mysql_auth.so
+Executer gmake
+Placer mysql_auth.so au bon endroit ( /usr/pkg/lib/pppd/2.4.3/mysql_auth.so ) (/usr/lib/pppd => /usr/pkg/lib/pppd)
+
+(linker /usr/pkg/lib/mysql/libmysqlclient.so.15 a /usr/lib/) (p-e facultatif)

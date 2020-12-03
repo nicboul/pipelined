@@ -1,0 +1,11 @@
+Edit generate_db.sh pour refleter ton setup
+
+Ensuite :
+# ./generate_db.sh
+
+Puis :
+# mysql -u root nom_de_db < db_populate.sql
+
+450.288.3261 si tu as des problems.
+
+--jix 

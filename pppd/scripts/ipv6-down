@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo $@ > /tmp/ipv6-down
+env >> /tmp/ipv6-down

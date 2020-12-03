@@ -1,0 +1,66 @@
+#9600
+#debug
+#lock
+#local
+#noauth
+#login
+proxyarp
+##mru 1280
+##mtu 1280
+#sync
+#asyncmap 0
+#updetach
+idle 600
+#active-filter-out 'src not 127.0.0.1'
+#active-filter-in icmp
+#nocrtscts
+#nocdtrcts
+#notty  -=> Loop Detected
+
+#-ipv6
+#+ipv6
+#ipv6cp-use-ipaddr
+#nodefaultroute
+ms-dns 10.18.7.35
+ms-dns 10.18.7.37
+
+#+pap
+#+mschap
+#+mschap-v2
+#require-chap
+
+require-mschap-v2
+#+mppe
+#mppe-40
+#mppe-128
+#require-mppe
+
+lcp-echo-failure 30
+lcp-echo-interval 5
+
+plugin mysql_auth.so
+
+db_name jix
+db_usr root
+db_pwd ""
+db_host 127.0.0.1
+
+t_cred credentials
+f_cred_id id
+f_cred_usr username
+f_cred_pwd password
+
+t_usr_srv_m users_services_map
+f_usr_srv_m_name name
+f_usr_srv_m_id id
+f_usr_srv_m_ena enabled
+
+t_usr_srv users_services
+f_usr_srv_name name
+
+t_sn subnets
+f_sn_id id
+f_sn_sn subnet
+f_sn_nm netmask
+
+t_stats statistics

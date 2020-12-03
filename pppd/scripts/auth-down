@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo $@ > /tmp/auth-down
+env >> /tmp/auth-down

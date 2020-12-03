@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Emplacement de la commande route (whereis route)
+ROUTE_CMD="/sbin/route"
+
+# Repertoire de base de PPPD
+# Doit obligatoirement terminer par un /
+PPPD_BASE="/"
+#PPPD_BASE="/usr/local/"
+#PPPD_BASE="/usr/pkg/"
+
+
+### FIN DE LA SECTION EDITABLE ###
+
+usepeerdns() {
+if [ -n "$USEPEERDNS" -a -f "$PPPD_BASE"etc/ppp/resolv.conf ]; then
+	rm -f "$PPPD_BASE"etc/ppp/resolv.prev
+	if [ -f /etc/resolv.conf ]; then
+		cp /etc/resolv.conf "$PPPD_BASE"etc/ppp/resolv.prev
+		grep domain "$PPPD_BASE"etc/ppp/resolv.prev > /etc/resolv.conf
+		grep search "$PPPD_BASE"etc/ppp/resolv.prev >> /etc/resolv.conf
+		cat "$PPPD_BASE"etc/ppp/resolv.conf >> /etc/resolv.conf
+	else
+		cp "$PPPD_BASE"etc/ppp/resolv.conf /etc
+	fi
+fi
+}
+
+if [ "$6" = "gateway-linux" ]
+then
+usepeerdns
+OLDGATE=`netstat -r -n -A inet | tail -n 1 | awk '{ print $2 }'`
+TUNSERVER=`netstat -n -t | grep 1723 | awk '{ print $5 }' | sed s/:1723// | head -n 1`
+echo OLDGATE $OLDGATE > "$PPPD_BASE"etc/ppp/gateway.prev
+echo TUNSERVER $TUNSERVER >> "$PPPD_BASE"etc/ppp/gateway.prev
+$ROUTE_CMD add $TUNSERVER gw $OLDGATE
+$ROUTE_CMD delete default gw $OLDGATE
+$ROUTE_CMD add default gw $IPREMOTE
+fi
+
+if [ "$6" = "gateway-bsd" ]
+then
+usepeerdns
+OLDGATE=`netstat -r -n -f inet | grep default | awk '{ print $2 }'`
+TUNSERVER=`netstat -n -t | grep 1723 | awk '{ print $5 }' | sed s/.1723// | head -n 1`
+echo OLDGATE $OLDGWATE > "$PPPD_BASE"etc/ppp/gateway.prev
+echo TUNSERVER $TUNSERVER >> "$PPPD_BASE"etc/ppp/gateway.prev
+$ROUTE_CMD add $TUNSERVER $OLDGATE
+$ROUTE_CMD delete default $OLDGATE
+$ROUTE_CMD add default $IPREMOTE
+fi
+
